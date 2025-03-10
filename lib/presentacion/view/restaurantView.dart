@@ -12,7 +12,6 @@ class RestaurantView extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    late int _index = 0;
 
     return  Scaffold(
       backgroundColor: Colors.white,
@@ -32,8 +31,7 @@ class RestaurantView extends StatelessWidget {
                 TitleBanner(text: 'Restaurante'),
                 ToggleButtons(
                   isSelected: [viewModel.selectedIndex == 0, viewModel.selectedIndex == 1],
-                  onPressed: (index) async { 
-                      _index = index;
+                  onPressed: (index) async {
                       await viewModel.onSelectionToggle(index);
                   },
                   children: const [

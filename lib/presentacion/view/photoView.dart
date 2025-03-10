@@ -15,7 +15,15 @@ class PhotoView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Etiqueta foto 1'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Etiqueta foto 1'),
+              IconButton(
+                onPressed: () => {}, 
+                icon: Icon(Icons.camera_alt_rounded))
+            ],
+          ),
           Align(
             alignment: Alignment.center,
             child: Image(
@@ -24,16 +32,17 @@ class PhotoView extends StatelessWidget {
               height: 200,
               fit: BoxFit.cover,
             ),),
-          ElevatedButton(
-            onPressed: () {}, 
-            child: Row(
-              children: [
-                Text('Tomar foto')
-              ],
-          )),
           
           SizedBoxH30(),
-          Text('Etiqueta foto 2'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Etiqueta foto 2'),
+              IconButton(
+                onPressed: () => {}, 
+                icon: Icon(Icons.camera_alt_rounded))
+            ],
+          ),
           Align(
             alignment: Alignment.center,
             child: Image(
@@ -41,14 +50,7 @@ class PhotoView extends StatelessWidget {
               width: 200,
               height: 200,
               fit: BoxFit.cover,
-            ),),
-          ElevatedButton(
-            onPressed: () {}, 
-            child: Row(
-              children: [
-                Text('Tomar foto')
-              ],
-          )),
+            ),)
         ]
       ),
     );
