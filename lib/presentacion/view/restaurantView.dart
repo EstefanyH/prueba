@@ -3,18 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:prueba/core/widgets/titlebanner.dart';
 import 'package:prueba/presentacion/view/newView.dart';
 import 'package:prueba/presentacion/view/photoView.dart';
-import 'package:prueba/presentacion/viewModel/restaurantviewmodel.dart';
+import 'package:prueba/presentacion/viewModel/restaurantViewModel.dart';
 
 class RestaurantView extends StatelessWidget {
   const RestaurantView({super.key});
   
-  
   @override
   Widget build(BuildContext context) {
-
+    
     WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<RestaurantViewModel>().init();
-    });
+    }); 
 
     return  Scaffold(
       backgroundColor: Colors.white,
@@ -35,7 +34,7 @@ class RestaurantView extends StatelessWidget {
                 ToggleButtons(
                   isSelected: [viewModel.selectedIndex == 0, viewModel.selectedIndex == 1],
                   onPressed: (index) async {
-                      await viewModel.onSelectionToggle(index);
+                      viewModel.onSelectionToggle(index);
                   },
                   children: const [
                       Padding(

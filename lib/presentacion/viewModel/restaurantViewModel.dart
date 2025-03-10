@@ -8,13 +8,14 @@ class RestaurantViewModel extends BaseViewModel with ChangeNotifier {
 
   RestaurantViewModel({required this.repository});
 
-  late int selectedIndex = 0;
+  late var selectedIndex = 0;
 
   Future<void> init  () async {
-    print('HomeViewModel');
+    print('RestaurantViewModel');
+    selectedIndex = 0;
   }
 
-  Future<void> onSelectionToggle (int index) async{
+  void onSelectionToggle (int index) async{
     selectedIndex = index;
     notifyListeners();
   }

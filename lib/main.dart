@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:prueba/config/router/routerManager.dart';
 import 'package:prueba/core/service_locator.dart';
 import 'package:prueba/presentacion/viewModel/homeViewModel.dart';
-import 'package:prueba/presentacion/viewModel/restaurantviewmodel.dart';
+import 'package:prueba/presentacion/viewModel/newViewModel.dart';
+import 'package:prueba/presentacion/viewModel/photoViewModel.dart';
+import 'package:prueba/presentacion/viewModel/restaurantViewModel.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,6 +23,8 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => sl<HomeViewModel>()),
         ChangeNotifierProvider(create: (_) => sl<RestaurantViewModel>()),
+        ChangeNotifierProvider(create: (_) => sl<NewViewModel>()),
+        ChangeNotifierProvider(create: (_) => sl<PhotoViewModel>()),
       ],
       child: const MyApp());
   }
