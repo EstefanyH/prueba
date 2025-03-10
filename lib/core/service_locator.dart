@@ -13,25 +13,27 @@ import 'package:prueba/presentacion/viewModel/restaurantViewModel.dart';
 
 final sl = GetIt.instance;
 
-void setupServiceLocator() async {
-  sl.reset(); 
+Future<void> setupServiceLocator() async {
+  //sl.reset(); 
 
   final db = DatabaseHelper();
 
-  sl.registerLazySingleton<DatabaseHelper>(() => DatabaseHelper());
+  sl.registerLazySingleton<DatabaseHelper>(() => db);
+  //await sl.isReady<DatabaseHelper>(); 
 
-  sl.registerLazySingleton<CiaDao>(() => CiaDao(sl()));
-  sl.registerLazySingleton<PhotoDao>(() => PhotoDao(sl()));
+  sl.registerLazySingleton<CiaDao>(() => CiaDao(sl.get()));
+  sl.registerLazySingleton<PhotoDao>(() => PhotoDao(sl.get()));
 
-  sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl());
+  sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(dao: sl.get()));
   sl.registerLazySingleton<RestaurantDatasource>(() => RestaurantDatasourceImpl());
 
+  sl.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(datasource: sl.get()));
+  sl.registerLazySingleton<RestaurantRepository>(() => RestaurantRepositoryImpl(datasource: sl.get()));
+  
+  sl.registerFactory<HomeViewModel>(() => HomeViewModel(repository: sl.get<HomeRepository>()));
+  sl.registerFactory<RestaurantViewModel>(() => RestaurantViewModel(repository: sl.get<RestaurantRepository>()));
 
-  sl.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(datasource: sl()));
-  sl.registerLazySingleton<RestaurantRepository>(() => RestaurantRepositoryImpl(datasource: sl()));
-
-
-  sl.registerFactory(() => HomeViewModel(repository: sl<HomeRepository>()));
-  sl.registerFactory(() => RestaurantViewModel(repository: sl<RestaurantRepository>()));
+  //sl.registerFactory(() => HomeViewModel(repository: sl.get<HomeRepository>()));
+  //sl.registerFactory(() => RestaurantViewModel(repository: sl.get<RestaurantRepository>()));
   
 }

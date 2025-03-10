@@ -5,10 +5,10 @@ import 'package:prueba/core/service_locator.dart';
 import 'package:prueba/presentacion/viewModel/homeViewModel.dart';
 import 'package:prueba/presentacion/viewModel/restaurantviewmodel.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  setupServiceLocator();
+  await setupServiceLocator();
   runApp(const MainApp());
 }
 
@@ -39,4 +39,5 @@ class MyApp extends StatelessWidget {
       onGenerateRoute: Routermanager.onGenerationRoute,
     );
   }
+
 }

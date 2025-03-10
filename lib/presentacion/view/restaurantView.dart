@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba/core/widgets/titlebanner.dart';
 import 'package:prueba/presentacion/view/newView.dart';
@@ -12,6 +11,10 @@ class RestaurantView extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<RestaurantViewModel>().init();
+    });
 
     return  Scaffold(
       backgroundColor: Colors.white,

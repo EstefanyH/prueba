@@ -21,4 +21,10 @@ class CiaDao {
     return maps.map((map) => CiaModel.fromJson(map)).toList();
   }
 
+  Future<List<CiaModel>> getList() async {
+    final db = await _dbHelper.database;
+    List<Map<String, dynamic>> maps = await db.query(tbName);
+    return maps.map((map) => CiaModel.fromJson(map)).toList();
+  }
+
 }

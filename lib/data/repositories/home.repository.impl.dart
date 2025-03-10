@@ -5,4 +5,14 @@ class HomeRepositoryImpl  implements HomeRepository {
   final HomeDatasource datasource;
 
   HomeRepositoryImpl({required this.datasource});
+  
+  @override
+  Future<int> getTotPending() async {
+    return await datasource.fetchTotPending();
+  }
+  
+  @override
+  Future<int> getTotRegister() async {
+    return await datasource.fetchTotRegister();
+  }
 }
