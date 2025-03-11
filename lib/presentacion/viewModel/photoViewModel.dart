@@ -8,6 +8,7 @@ import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/core/service_locator.dart';
 import 'package:prueba/core/util/callback.dart';
 import 'package:prueba/core/widgets/camera.dart';
+import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/photo.repository.dart';
 
@@ -29,11 +30,32 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
 
   Future<void> onSave (BuildContext ctx) async{
     try {
-      repository.postSaveData();
-      showMessage(ctx, 'Operación exitosa');
+      var model = await repository.getCia();
+      if (model == null) {
+        showMessage(ctx, 'Completar datos de restaurante');
+      } else {
+        bool valid = isValid(ctx, model);
+        if (valid){
+          repository.postSaveData();
+          showMessage(ctx, 'Operación exitosa');
+        }
+      }
+
     } catch (xe ) {
       showMessage(ctx, 'Ocurrió un error intentar mas rato');
     }
+  }
+
+  bool isValid(BuildContext ctx, Cia model) {
+    if(model.name.isEmpty) {
+      showMessage(ctx, 'Ingresar nombre');
+      return false;
+    }
+    if(model.ruc.isEmpty) {
+      showMessage(ctx, 'Ingresar nombre');
+      return false;
+    }
+    return true;
   }
 
   Future<void> onShowOpenModal(BuildContext ctx, PhotoSide type) async {

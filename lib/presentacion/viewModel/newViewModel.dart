@@ -75,9 +75,6 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
     // Actualizar los valores de latitud y longitud
     latitude_controller.text  = position.latitude.toString();
     longitude_controller.text = position.longitude.toString();
-    //markerPosition = LatLng(latitude, longitude);
-
-    // Notificar a la vista para que se actualice
     notifyListeners();
   }
 
