@@ -1,7 +1,9 @@
+import 'package:prueba/core/api_config.dart';
 import 'package:prueba/core/services/apiService.dart';
+import 'package:prueba/data/model/cia.model.dart';
 
 abstract class PhotoDatasource {
-
+  Future<void> fetchNewCia(CiaModel model);
 }
 
 class PhotoDatasourceImpl extends PhotoDatasource {
@@ -9,6 +11,12 @@ class PhotoDatasourceImpl extends PhotoDatasource {
   final ApiService api;
 
   PhotoDatasourceImpl({required this.api});
+  
+  @override
+  Future<void> fetchNewCia(CiaModel model) async {
+    var response = await api.post(ApiConfig.createRestaurant, model.toJson());
+    return response;
+  }
   
 
 }

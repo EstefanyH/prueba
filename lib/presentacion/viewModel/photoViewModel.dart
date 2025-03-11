@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:prueba/core/baseViewModel.dart';
@@ -14,16 +16,14 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   
   final PermissionService _permissionService = sl<PermissionService>();
   final CameraService _cameraService = sl<CameraService>();
+  
+  final ImagePicker _picker = ImagePicker();
+  File? _imageFile;
 
+  File? get imageFile => _imageFile;
+  /*
   XFile? _image1File;
-  XFile? get image1File => _image1File;
-
-  XFile? _image2File;
-  XFile? get image2File => _image2File;
-
-  XFile? _image3File;
-  XFile? get image3File => _image3File;
-
+  XFile? get image1File => _image1File; */
 
   PhotoViewModel({required this.repository});
 
@@ -54,10 +54,10 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
 
         switch(type){
           case PhotoSide.front: 
-            _image1File = image;
+            //_image1File = image;
             break;
           case PhotoSide.left:
-            _image2File = image;
+            //_image2File = image;
           break;
           case PhotoSide.right: break;
         }
@@ -77,8 +77,40 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
 
     }
      
-
   }
 
+  Future<void> takePhoto(BuildContext ctx) async {
+    try {
+      /*bool hasPermission = await _permissionService.requestCameraPermission(ctx);
+
+      if (!hasPermission) {
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(content: Text("Permiso de cámara denegado ❌")),
+        );
+        return;
+      }*/
+
+      final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        print(pickedFile.path);
+        
+        _imageFile = File(pickedFile.path);
+        
+        notifyListeners(); // Notifica a la UI que hay una nueva imagen
+      } else {
+        _showError(ctx, "No se tomó ninguna foto.");
+      }
+    } catch (e) {
+      print("Error al abrir la cámara: $e");
+      _showError(ctx, "Error al abrir la cámara.");
+    }
+  }
+
+  void _showError(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message, style: TextStyle(color: Colors.white)), backgroundColor: Colors.red),
+    );
+  }
 
 }

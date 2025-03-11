@@ -73,8 +73,8 @@ final class ApiService {
 
   Map<String, String> _getHeaders() {
     return {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer ${ApiConfig.token}", // Token global
+      //"Content-Type": "application/json",
+      "x-api-key": "${ApiConfig.token}", // Token global
     };
   }
 

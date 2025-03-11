@@ -6,6 +6,7 @@ import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/data/database/databaseHelper.dart';
 import 'package:prueba/data/database/photo.dao.dart';
+import 'package:prueba/data/database/type_photo.dao.dart';
 import 'package:prueba/data/repositories/home.repository.impl.dart';
 import 'package:prueba/data/repositories/new.repository.impl.dart';
 import 'package:prueba/data/repositories/photo.repository.impl.dart';
@@ -44,8 +45,9 @@ Future<void> setupServiceLocator() async {
 
   sl.registerLazySingleton<CiaDao>(() => CiaDao(sl.get()));
   sl.registerLazySingleton<PhotoDao>(() => PhotoDao(sl.get()));
+  sl.registerLazySingleton<TypePhotoDao>(() => TypePhotoDao(sl.get()));
 
-  sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(dao: sl.get()));
+  sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(dao: sl.get(), type: sl.get(), api: sl.get()));
   sl.registerLazySingleton<RestaurantDatasource>(() => RestaurantDatasourceImpl(dao: sl.get()));
   sl.registerLazySingleton<NewDatasource>(() => NewDatasourceImpl());
   sl.registerLazySingleton<PhotoDatasource>(() => PhotoDatasourceImpl(api: sl.get()));

@@ -8,6 +8,7 @@ class DatabaseHelper {
 
     static const String tbEmpresa = 'empresa';
     static const String tbFotos = 'foto';
+    static const String tbTipo = 'tipo';
 //name, ruc, latitude, longitude, comment, enviado
     static const String colId = 'id';
     static const String colNombre = 'name';
@@ -19,8 +20,10 @@ class DatabaseHelper {
 
     static const String colruta = 'ruta';
     static const String colarchivo = 'archivo';
-    //static const String coldelete = 'isdelete'; //0: nuevo, 1: eliminado
-    
+
+    static const String coluuid = 'uuid';
+    static const String colname = 'name';
+    static const String coldescription = 'description';
 
     static final DatabaseHelper _instance = DatabaseHelper._internal();
     factory DatabaseHelper() => _instance;
@@ -64,6 +67,14 @@ class DatabaseHelper {
             $colarchivo TEXT NOT NULL,
             $colruta TEXT NOT NULL,
             $colisEnviado INTEGER
+            );
+        ''');
+
+        await db.execute('''
+            CREATE TABLE $tbTipo (
+            $coluuid TEXT PRIMARY KEY ,
+            $colname TEXT NOT NULL,
+            $coldescription TEXT NOT NULL
             );
         ''');
     }

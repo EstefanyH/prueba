@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:prueba/core/baseViewModel.dart';
 import 'package:prueba/data/model/cia.model.dart';
-import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/new.repository.dart';
 
@@ -19,7 +17,6 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
 
   var _name = '', _ruc = '', _latitud = '', _longitud = '', _comment = '';
    
-  //late Cia data;
   Future<void> init() async {
     clear();
   }

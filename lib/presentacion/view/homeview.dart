@@ -50,7 +50,9 @@ class HomeView extends StatelessWidget {
                 ),
                 const Text('Lista de restaurante', style: style22wblack,),
                 ElevatedButton(
-                  onPressed: () => {}, 
+                  onPressed: () async {
+                    await viewModel.onDownloadType(context);
+                  }, 
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
