@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba/commom/css/fontstyle.dart';
 import 'package:prueba/config/router/routerManager.dart';
+import 'package:prueba/core/separator.dart';
 import 'package:prueba/core/widgets/titlebanner.dart';
 import 'package:prueba/presentacion/viewModel/homeViewModel.dart';
 
@@ -57,7 +59,35 @@ class HomeView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text('Descargar tipos de fotos')
-                    ],))
+                    ],)),
+                  SizedBoxH30(),
+                  Expanded(
+                    child: viewModel.latitude == 0.0 && viewModel.longitude == 0.0
+                        ? Center(child: CircularProgressIndicator())
+                        : FlutterMap(
+                            options: MapOptions(
+                              initialCenter: viewModel.markerPosition, // Centrado en la ubicación actual
+                              minZoom: 15.0, // Zoom adecuado para la ubicación
+                            ),
+                            children: [
+                              TileLayer(
+                                urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                subdomains: ['a', 'b', 'c'],),
+                              MarkerLayer(markers:  [
+                                  Marker(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    point: viewModel.markerPosition,
+                                    child:  Icon(
+                                      Icons.location_on,
+                                      color: Colors.red,
+                                      size: 40,
+                                    ),
+                                  ),
+                                ],),
+                            ],
+                          ),
+                  )
               ],
           ),);
         })
