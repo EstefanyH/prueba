@@ -1,6 +1,6 @@
 class Cia {
   final String name;
-  final int ruc;
+  final String ruc;
   final String longitude;
   final String latitude;
   final String comment;

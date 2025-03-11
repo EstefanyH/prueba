@@ -1,4 +1,8 @@
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
+import 'package:prueba/core/services/apiService.dart';
+import 'package:prueba/core/services/camera_service.dart';
+import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/data/database/databaseHelper.dart';
 import 'package:prueba/data/database/photo.dao.dart';
@@ -6,6 +10,7 @@ import 'package:prueba/data/repositories/home.repository.impl.dart';
 import 'package:prueba/data/repositories/new.repository.impl.dart';
 import 'package:prueba/data/repositories/photo.repository.impl.dart';
 import 'package:prueba/data/repositories/restaurant.repository.impl.dart';
+import 'package:prueba/core/services/shared_preferences_service.dart';
 import 'package:prueba/data/source/home.datasource.dart';
 import 'package:prueba/data/source/new.datasource.dart';
 import 'package:prueba/data/source/photo.datasource.dart';
@@ -23,11 +28,19 @@ final sl = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
   //sl.reset(); 
-
+  final sharedPreferencesService = SharedPreferencesService();
   final db = DatabaseHelper();
 
+  await sharedPreferencesService.init();
+  sl.registerSingleton<SharedPreferencesService>(sharedPreferencesService);
+
+  sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() => ApiService(sl()));
   sl.registerLazySingleton<DatabaseHelper>(() => db);
-  //await sl.isReady<DatabaseHelper>(); 
+  
+  sl.registerLazySingleton(() => PermissionService());
+  sl.registerLazySingleton(() => CameraService());
+
 
   sl.registerLazySingleton<CiaDao>(() => CiaDao(sl.get()));
   sl.registerLazySingleton<PhotoDao>(() => PhotoDao(sl.get()));
@@ -35,12 +48,12 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(dao: sl.get()));
   sl.registerLazySingleton<RestaurantDatasource>(() => RestaurantDatasourceImpl(dao: sl.get()));
   sl.registerLazySingleton<NewDatasource>(() => NewDatasourceImpl());
-  sl.registerLazySingleton<PhotoDatasource>(() => PhotoDatasourceImpl());
+  sl.registerLazySingleton<PhotoDatasource>(() => PhotoDatasourceImpl(api: sl.get()));
 
   sl.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(datasource: sl.get()));
   sl.registerLazySingleton<RestaurantRepository>(() => RestaurantRepositoryImpl(datasource: sl.get<RestaurantDatasource>()));
-  sl.registerLazySingleton<NewRepository>(() => NewRepositoryImpl(datasource: sl.get()));
-  sl.registerLazySingleton<PhotoRepository>(() => PhotoRepositoryImpl(datasource: sl.get()));
+  sl.registerLazySingleton<NewRepository>(() => NewRepositoryImpl(datasource: sl.get(), shared: sl.get()));
+  sl.registerLazySingleton<PhotoRepository>(() => PhotoRepositoryImpl(datasource: sl.get(), dao: sl.get(), shared: sl.get()));
   
   sl.registerFactory<HomeViewModel>(() => HomeViewModel(repository: sl.get<HomeRepository>()));
   sl.registerFactory<RestaurantViewModel>(() => RestaurantViewModel(repository: sl.get<RestaurantRepository>()));

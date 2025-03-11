@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prueba/core/baseViewModel.dart';
+import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/repository/restaurant.repository.dart';
 
 class RestaurantViewModel extends BaseViewModel with ChangeNotifier {
@@ -7,6 +8,8 @@ class RestaurantViewModel extends BaseViewModel with ChangeNotifier {
   final RestaurantRepository repository;
 
   RestaurantViewModel({required this.repository});
+  
+  late TextEditingController namectrl = new TextEditingController();
 
   late var selectedIndex = 0;
 

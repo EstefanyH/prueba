@@ -8,14 +8,14 @@ class DatabaseHelper {
 
     static const String tbEmpresa = 'empresa';
     static const String tbFotos = 'foto';
-
+//name, ruc, latitude, longitude, comment, enviado
     static const String colId = 'id';
-    static const String colNombre = 'nombre';
+    static const String colNombre = 'name';
     static const String colRuc = 'ruc';
-    static const String colLatitud = 'latitud';
-    static const String colLongitud = 'longitud';
-    static const String colComentario = 'comentario';
-    static const String colisEnviado = 'isenviado'; // 1: online, 0: offline
+    static const String colLatitud = 'latitude';
+    static const String colLongitud = 'longitude';
+    static const String colComentario = 'comment';
+    static const String colisEnviado = 'enviado'; // 1: online, 0: offline
 
     static const String colruta = 'ruta';
     static const String colarchivo = 'archivo';
@@ -49,7 +49,7 @@ class DatabaseHelper {
             CREATE TABLE $tbEmpresa (
             $colId INTEGER PRIMARY KEY AUTOINCREMENT,
             $colNombre TEXT NOT NULL,
-            $colRuc INTEGER,
+            $colRuc TEXT NOT NULL,
             $colLatitud TEXT NOT NULL,
             $colLongitud TEXT NOT NULL,
             $colComentario TEXT NOT NULL,

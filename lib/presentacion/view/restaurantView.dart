@@ -19,11 +19,7 @@ class RestaurantView extends StatelessWidget {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('GeoRest'),
-        actions: [
-          IconButton(
-            onPressed: () => {}, 
-            icon: Icon(Icons.save))
-        ],),
+        actions: [ ],),
       body: Consumer<RestaurantViewModel>(
         builder: (context, viewModel, child){
           return Padding(
@@ -48,7 +44,8 @@ class RestaurantView extends StatelessWidget {
                     ],
                 ),
                 Expanded(
-                  child: viewModel.selectedIndex == 0 ? NewView() : PhotoView() ,                  
+                  child: viewModel.selectedIndex == 0 ? 
+                    NewView() : PhotoView() ,                  
                 )
               ],
             ),);

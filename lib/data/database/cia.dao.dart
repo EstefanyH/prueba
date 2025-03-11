@@ -8,9 +8,13 @@ class CiaDao {
 
   CiaDao(this._dbHelper);
 
-  Future<int> register(CiaModel model) async{
+  Future<int> register(var model) async{
+    try {
     final db = await _dbHelper.database;
-    return await db.insert(tbName, model.toJson());
+    return await db.insert(tbName, model);
+    } catch(xe ){
+      throw Exception(xe);
+    }
   }
 
   Future<List<CiaModel>> getListOffOnline() async {
