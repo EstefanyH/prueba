@@ -4,6 +4,6 @@ abstract class PhotoRepository {
   
   Future<Cia?> getCia();
 
-  Future<void> postSaveData();
+  Future<void> postSaveData(bool isconnect);
   
 }

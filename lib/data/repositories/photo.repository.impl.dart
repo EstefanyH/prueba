@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/core/util/app_constants.dart';
 import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/core/services/shared_preferences_service.dart';
@@ -19,14 +20,14 @@ class PhotoRepositoryImpl extends PhotoRepository{
     required this.shared});
     
     @override
-    Future<void> postSaveData() async {
+    Future<void> postSaveData(bool isconnect) async {
       try {
         var data = shared.getString(AppConstant.p_cia);
         var toJson = jsonDecode(data ?? '');
         // guardando restaurant local
         await dao.register(toJson);
-
-        datasource.fetchNewCia(toJson);
+ 
+        if (isconnect) await datasource.fetchNewCia(toJson);
 
       }catch( xe ) {
         throw xe;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
@@ -95,5 +96,24 @@ class PermissionService {
       }
     }
     return true;  // Los permisos son válidos
+  }
+
+static Future<bool> isInternetAvailable() async {
+    try {
+      // Realizamos una solicitud HTTP a Google (un servidor confiable)
+      final response = await http.get(Uri.parse('https://www.google.com'));
+
+      // Si la respuesta es exitosa (código 200), significa que hay Internet
+      if (response.statusCode == 200) {
+        print('Conexión a Internet disponible');
+        return true;
+      } else {
+        print('No se pudo acceder a Internet');
+        return false;
+      }
+    } catch (e) {
+      print('Error al intentar conectarse a Internet: $e');
+      return false;
+    }
   }
 }
