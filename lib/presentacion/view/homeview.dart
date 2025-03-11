@@ -60,14 +60,14 @@ class HomeView extends StatelessWidget {
                     children: [
                       const Text('Descargar tipos de fotos')
                     ],)),
-                  SizedBoxH30(),
+                  SizedBoxH10(),
                   Expanded(
                     child: viewModel.latitude == 0.0 && viewModel.longitude == 0.0
                         ? Center(child: CircularProgressIndicator())
                         : FlutterMap(
                             options: MapOptions(
                               initialCenter: viewModel.markerPosition, // Centrado en la ubicación actual
-                              minZoom: 15.0, // Zoom adecuado para la ubicación
+                              initialZoom: 15.0, // Zoom adecuado para la ubicación
                             ),
                             children: [
                               TileLayer(

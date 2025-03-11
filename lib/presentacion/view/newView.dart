@@ -11,6 +11,11 @@ class NewView extends StatelessWidget {
   Widget build(BuildContext context) {
     print('---------- NewView');
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<NewViewModel>().init();
+    });
+
+
     return SingleChildScrollView(
       child: Padding(
       padding: EdgeInsets.all(15),

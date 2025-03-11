@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:prueba/core/baseViewModel.dart';
+import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/data/model/cia.model.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/new.repository.dart';
@@ -19,6 +21,13 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
    
   Future<void> init() async {
     clear();
+    try {
+      await getCurrentLocation();
+      
+    } catch (xe) {
+      print(xe);
+    }
+    notifyListeners();
   }
 
   void clear() {
@@ -47,6 +56,29 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
       comment: _comment);
 
     repository.getSave(model);
+  }
+
+    Future<void> getCurrentLocation() async {
+    bool serviceEnabled;
+
+    serviceEnabled = await PermissionService.checkAndRequestPermissions();
+    if (!serviceEnabled) {
+      print('No se tienen los permisos necesarios para acceder a la ubicación');
+      return;
+    }
+
+    // Obtener la ubicación actual
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    // Actualizar los valores de latitud y longitud
+    latitude_controller.text  = position.latitude.toString();
+    longitude_controller.text = position.longitude.toString();
+    //markerPosition = LatLng(latitude, longitude);
+
+    // Notificar a la vista para que se actualice
+    notifyListeners();
   }
 
 }

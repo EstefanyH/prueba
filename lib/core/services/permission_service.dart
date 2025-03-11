@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PermissionService {
@@ -56,4 +57,43 @@ class PermissionService {
 
     return statuses.values.every((status) => status.isGranted);
   } 
+
+  static Future<bool> isLocationServiceEnabled() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      print('El servicio de ubicación no está habilitado');
+      return false;
+    }
+    return true;
+  }
+
+  // Verificar si los permisos de ubicación están concedidos
+  static Future<LocationPermission> checkPermissions() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    return permission;
+  }
+
+  // Solicitar permisos de ubicación si no están concedidos
+  static Future<LocationPermission> requestPermissions() async {
+    LocationPermission permission = await Geolocator.requestPermission();
+    return permission;
+  }
+
+  // Función que encapsula todo el proceso de verificación y solicitud de permisos
+  static Future<bool> checkAndRequestPermissions() async {
+    bool serviceEnabled = await isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return false;  // Si el servicio no está habilitado, no hay nada más que hacer
+    }
+
+    LocationPermission permission = await checkPermissions();
+    if (permission == LocationPermission.denied) {
+      permission = await requestPermissions();
+      if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+        print('Los permisos de ubicación no fueron concedidos');
+        return false;
+      }
+    }
+    return true;  // Los permisos son válidos
+  }
 }

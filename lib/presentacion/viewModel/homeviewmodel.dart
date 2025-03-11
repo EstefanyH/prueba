@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:prueba/config/router/routerManager.dart';
 import 'package:prueba/core/baseViewModel.dart';
+import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/domain/entities/type_photo.dart';
 import 'package:prueba/domain/repository/home.repository.dart';
 
@@ -45,24 +46,11 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
 
   Future<void> getCurrentLocation() async {
     bool serviceEnabled;
-    LocationPermission permission;
 
-    // Verificar si el servicio de ubicación está habilitado
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    serviceEnabled = await PermissionService.checkAndRequestPermissions();
     if (!serviceEnabled) {
-      print('El servicio de ubicación no está habilitado');
+      print('No se tienen los permisos necesarios para acceder a la ubicación');
       return;
-    }
-
-    // Verificar permisos de ubicación
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        print('Los permisos de ubicación no fueron concedidos');
-        return;
-      }
     }
 
     // Obtener la ubicación actual
@@ -78,4 +66,5 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
     // Notificar a la vista para que se actualice
     notifyListeners();
   }
+
 }
