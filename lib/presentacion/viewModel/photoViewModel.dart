@@ -36,40 +36,48 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> onShowOpenModal(BuildContext ctx, PhotoType type) async {
+  Future<void> onShowOpenModal(BuildContext ctx, PhotoSide type) async {
     showModalCamera(ctx, 
-      eventInterface: EventInterface(onItemSelected: (context, i, selectedItem) async {
-      await getAction(ctx, type);
-      print('camera');
+      eventInterface: EventInterface(onItemSelected: (context, i, selectedItem) async {        
+        await _openCamera(ctx, type); 
     }));
   }
 
-  Future<void> getAction (BuildContext ctx,  PhotoType type) async {
-    switch(type){
-      case PhotoType.camera: 
-        _openCamera(ctx, _image1File);
-        break;
-      case PhotoType.gallery: break;
-    }
-  }
-  
+  Future<void> _openCamera(BuildContext ctx, PhotoSide type) async {
+    try {
+      bool hasPermission = await _permissionService.requestCameraPermission(ctx);
 
-  Future<void> _openCamera(BuildContext ctx, XFile? file) async {
-    bool hasPermission = await _permissionService.requestCameraPermission();
-    
-    if (!hasPermission) {
-      ScaffoldMessenger.of(ctx).showSnackBar(
-        SnackBar(content: Text("Permiso de cámara denegado ❌")),
-      );
-      return;
-    }
+      final image = await _cameraService.openCamera();
+      if (image != null) {
+        print(image);
+        print(image!.path);
 
-    final image = await _cameraService.openCamera();
-    if (image != null) {
-      file = image;
-      notifyListeners();
-      
+        switch(type){
+          case PhotoSide.front: 
+            _image1File = image;
+            break;
+          case PhotoSide.left:
+            _image2File = image;
+          break;
+          case PhotoSide.right: break;
+        }
+
+        notifyListeners(); // Notifica cambios a la UI
+
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(content: Text("Imagen capturada exitosamente ✅")),
+        );
+      } else {
+        ScaffoldMessenger.of(ctx).showSnackBar(
+          SnackBar(content: Text("No se capturó ninguna imagen ❌")),
+        );
+      }
+    } catch( xe){
+      print(xe);
+
     }
+     
+
   }
 
 

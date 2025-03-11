@@ -16,7 +16,8 @@ class PhotoView extends StatelessWidget {
   Widget build(BuildContext context) {
     print('---------- PhotoView');
   
-    return Padding(
+    return SingleChildScrollView(
+      child: Padding(
       padding: EdgeInsets.all(15),
       child: Consumer<PhotoViewModel>(
         builder: (context, viewModel, child){
@@ -30,7 +31,7 @@ class PhotoView extends StatelessWidget {
                   Text('Etiqueta foto 1'),
                   IconButton(
                     onPressed: () async {
-                       viewModel.onShowOpenModal(context, PhotoType.camera);
+                       await viewModel.onShowOpenModal(context, PhotoSide.front);
                     }, 
                     icon: Icon(Icons.camera_alt_rounded))
                 ],
@@ -49,7 +50,7 @@ class PhotoView extends StatelessWidget {
                   Text('Etiqueta foto 2'),
                   IconButton(
                     onPressed: () async {
-                       await viewModel.onShowOpenModal(context, PhotoType.gallery);
+                       await viewModel.onShowOpenModal(context, PhotoSide.front);
                     }, 
                     icon: Icon(Icons.camera_alt_rounded))
                 ],
@@ -69,6 +70,7 @@ class PhotoView extends StatelessWidget {
             ]
           );
         },)
+    ),
     );
   }
 }

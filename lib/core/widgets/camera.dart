@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:prueba/core/util/callback.dart';
+import 'package:prueba/domain/enums/app_Enums.dart';
 
 void showModalCamera(BuildContext context, {required EventInterface eventInterface}) {
     showModalBottomSheet(
@@ -22,16 +23,16 @@ void showModalCamera(BuildContext context, {required EventInterface eventInterfa
                 leading: Icon(Icons.camera_alt, color: Colors.blue),
                 title: Text("Tomar foto"),
                 onTap: () {
-                    eventInterface.onItemSelected(context, 0, '');
+                    eventInterface.onItemSelected(context, PhotoType.camera.value, '');
                 }
               ),
-              ListTile(
+             /* ListTile(
                 leading: Icon(Icons.photo_library, color: Colors.green),
                 title: Text("Seleccionar de galería"),
                 onTap: () {
-                    eventInterface.onItemSelected(context, 0, '');
+                    eventInterface.onItemSelected(context, PhotoType.gallery.value, '');
                   } ,
-              ),
+              ),*/
             ],
           ),
         );

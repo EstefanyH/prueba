@@ -11,7 +11,8 @@ class NewView extends StatelessWidget {
   Widget build(BuildContext context) {
     print('---------- NewView');
 
-    return Padding(
+    return SingleChildScrollView(
+      child: Padding(
       padding: EdgeInsets.all(15),
       child: Consumer<NewViewModel>(
         builder: (context, viewModel, child) {
@@ -70,6 +71,7 @@ class NewView extends StatelessWidget {
             ],
           );
         },) 
+    ),
     );
   }
 }

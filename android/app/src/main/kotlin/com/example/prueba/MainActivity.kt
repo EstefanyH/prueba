@@ -1,4 +1,4 @@
-package com.example.prueba
+package com.hache.prueba
 
 import io.flutter.embedding.android.FlutterActivity
 
