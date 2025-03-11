@@ -20,18 +20,25 @@ class PhotoRepositoryImpl extends PhotoRepository{
     required this.shared});
     
     @override
-    Future<void> postSaveData(bool isconnect) async {
+    Future<bool> postSaveData(bool isconnect) async {
+      bool resultado = false;
       try {
         var data = shared.getString(AppConstant.p_cia);
         var toJson = jsonDecode(data ?? '');
         // guardando restaurant local
         await dao.register(toJson);
- 
-        if (isconnect) await datasource.fetchNewCia(toJson);
+        
+        print(toJson);
+       /* print(data);
+        Map<String, dynamic> data1 = json.decode(data.toString());
+        print(data1);*/
+
+        if (isconnect) resultado = await datasource.fetchNewCia(toJson);
 
       }catch( xe ) {
         throw xe;
       }
+      return resultado;
     }
 
   @override

@@ -28,7 +28,7 @@ final class ApiService {
     try {
       final response = await client.post(
         Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
+        headers: _getHeaders(),
         body: json.encode(body),
       );
 
@@ -80,7 +80,7 @@ final class ApiService {
 
   // **Maneja las respuestas HTTP**
   dynamic _handleResponse(http.Response response) {
-    if (response.statusCode == 200 || response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 400) {
       return jsonDecode(response.body);
     } else {
       throw Exception("Error: ${response.statusCode}, ${response.body}");

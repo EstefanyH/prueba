@@ -8,10 +8,9 @@ class ResponseModel extends Response{
    
  
   factory ResponseModel.fromJson(Map<String, dynamic> json) {
-    var _json = json['data'] as List;
 
     return ResponseModel(
-      message: json['message'], 
-      data: json['data']);
+      message: json['message'] ?? json['mensaje'], 
+      data: json['data'] ?? null );
   }
 }

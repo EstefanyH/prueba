@@ -29,16 +29,18 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   PhotoViewModel({required this.repository});
 
   Future<void> onSave (BuildContext ctx) async{
+    bool valid = false;
     try {
       var model = await repository.getCia();
       if (model == null) {
         showMessage(ctx, 'Completar datos de restaurante');
       } else {
-        bool valid = isValid(ctx, model);
+         valid = isValid(ctx, model);
         if (valid){
           bool isconnect = await PermissionService.isInternetAvailable();
-          repository.postSaveData(isconnect);
-          showMessage(ctx, 'Operación exitosa');
+          valid = await repository.postSaveData(isconnect);
+          if (valid) showMessage(ctx, 'Operación exitosa');
+          else showMessage(ctx, 'Ocurrió un error intentar mas rato');
         }
       }
 

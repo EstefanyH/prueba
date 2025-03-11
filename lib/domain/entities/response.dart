@@ -1,6 +1,6 @@
 class Response {
   final String message;
-  final List data;
+  final Map<String, dynamic>? data;
 
   Response({ 
     required this.message, 
