@@ -4,22 +4,26 @@ import 'package:prueba/core/util/app_constants.dart';
 import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/core/services/shared_preferences_service.dart';
 import 'package:prueba/data/database/photo.dao.dart';
+import 'package:prueba/data/database/type_photo.dao.dart';
 import 'package:prueba/data/model/cia.model.dart';
 import 'package:prueba/data/model/photo.model.dart';
 import 'package:prueba/data/source/photo.datasource.dart';
 import 'package:prueba/domain/entities/cia.dart';
+import 'package:prueba/domain/entities/type_photo.dart';
 import 'package:prueba/domain/repository/photo.repository.dart';
 
 class PhotoRepositoryImpl extends PhotoRepository{
   final PhotoDatasource datasource;
   final CiaDao dao;
   final PhotoDao pdao;
+  final TypePhotoDao tdao;
   final SharedPreferencesService shared;
 
   PhotoRepositoryImpl({
     required this.datasource,
     required this.dao,
     required this.pdao,
+    required this.tdao,
     required this.shared});
     
     @override
@@ -63,6 +67,11 @@ class PhotoRepositoryImpl extends PhotoRepository{
     } catch(xe) {
       throw Exception(xe);
     }
+  }
+
+  @override
+  Future<List<TypePhoto>> getAllType() async {
+    return await tdao.getList();
   }
 
 }

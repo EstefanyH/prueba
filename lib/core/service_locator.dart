@@ -55,7 +55,8 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(datasource: sl.get()));
   sl.registerLazySingleton<RestaurantRepository>(() => RestaurantRepositoryImpl(datasource: sl.get<RestaurantDatasource>()));
   sl.registerLazySingleton<NewRepository>(() => NewRepositoryImpl(datasource: sl.get(), shared: sl.get()));
-  sl.registerLazySingleton<PhotoRepository>(() => PhotoRepositoryImpl(datasource: sl.get(), dao: sl.get(), shared: sl.get(), pdao: sl.get()));
+  sl.registerLazySingleton<PhotoRepository>(() => PhotoRepositoryImpl(datasource: sl.get(), dao: sl.get(), 
+    shared: sl.get(), pdao: sl.get(), tdao: sl.get()));
   
   sl.registerFactory<HomeViewModel>(() => HomeViewModel(repository: sl.get<HomeRepository>()));
   sl.registerFactory<RestaurantViewModel>(() => RestaurantViewModel(repository: sl.get<RestaurantRepository>()));

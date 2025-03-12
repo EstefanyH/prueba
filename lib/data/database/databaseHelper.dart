@@ -20,6 +20,7 @@ class DatabaseHelper {
 
     static const String colRuta = 'ruta';
     static const String colArchivo = 'archivo';
+    static const String coltipo = 'tipo';
 
     static const String colUuid = 'uuid';
     static const String colName = 'name';
@@ -64,6 +65,7 @@ class DatabaseHelper {
             CREATE TABLE $tbFotos (
             $colId INTEGER PRIMARY KEY AUTOINCREMENT,
             $colRuc TEXT NOT NULL,
+            $coltipo TEXT NOT NULL,
             $colArchivo TEXT NOT NULL,
             $colRuta TEXT NOT NULL,
             $colEnviado INTEGER

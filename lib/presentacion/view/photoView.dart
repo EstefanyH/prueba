@@ -8,38 +8,53 @@ class PhotoView extends StatelessWidget {
   const PhotoView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    print('---------- PhotoView');
-  
-    return SingleChildScrollView(
-      child: Padding(
-      padding: EdgeInsets.all(15),
-      child: Consumer<PhotoViewModel>(
+  Widget build(BuildContext context) { 
+    
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<PhotoViewModel>().init(context);
+    }); 
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Consumer<PhotoViewModel>(
         builder: (context, viewModel, child){
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Etiqueta foto 1 - Frontal'),
-                  IconButton(
-                    onPressed: () async {
-                       await viewModel.takePhoto(context);
-                       //await viewModel.onShowOpenModal(context, PhotoSide.front);
-                    }, 
-                    icon: Icon(Icons.camera_alt_rounded))
-                ],
-              ),
-              
-              viewModel.imageFile != null
-                      ? Image.file(viewModel.imageFile!, height: 200, fit: BoxFit.cover)
-                      : Image(
-                          image: AssetImage('assets/image/desconocido.png'), 
-                          height: 200, 
-                          fit: BoxFit.cover),
-                          
+              Expanded(
+                child: ListView.builder(
+                  itemCount: viewModel.types.length,
+                  itemBuilder: (context, index) {
+                    
+                    var row = viewModel.types[index];
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Etiqueta foto ${index + 1} - ${row.name}'),
+                            IconButton(
+                              onPressed: () async {
+                                await viewModel.takePhoto(context, index, row.uuid );
+                                //await viewModel.onShowOpenModal(context, PhotoSide.front);
+                              }, 
+                              icon: Icon(Icons.camera_alt_rounded))
+                          ],
+                        ),
+                        
+                        viewModel.imageFiles[index] != null
+                                ? Image.file(viewModel.imageFiles[index]!, height: 200, fit: BoxFit.cover)
+                                : Image(
+                                    image: AssetImage('assets/image/desconocido.png'), 
+                                    height: 200, 
+                                    fit: BoxFit.cover),
+                        
+                      ]
+                    );
+                  })),
               SizedBoxH10(),
               ElevatedButton(
                 onPressed: () async {
@@ -54,7 +69,6 @@ class PhotoView extends StatelessWidget {
             ]
           );
         },)
-    ),
     );
   }
 }

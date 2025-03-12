@@ -10,7 +10,7 @@ import 'package:prueba/core/util/callback.dart';
 import 'package:prueba/core/widgets/camera.dart';
 import 'package:prueba/data/model/photo.model.dart';
 import 'package:prueba/domain/entities/cia.dart';
-import 'package:prueba/domain/entities/photo.dart';
+import 'package:prueba/domain/entities/type_photo.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/photo.repository.dart';
 
@@ -21,14 +21,31 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   final CameraService _cameraService = sl<CameraService>();
   
   final ImagePicker _picker = ImagePicker();
-  File? _imageFile;
+  File? _imageFile; 
 
-  File? get imageFile => _imageFile;
-  /*
-  XFile? _image1File;
-  XFile? get image1File => _image1File; */
+  List<File?> _imageFiles = [];
+  List<File?> get imageFiles => _imageFiles;
+
+  List<TypePhoto> types = [];
+  List<PhotoModel> photos = [];
+
+  String _ruc = '111';
 
   PhotoViewModel({required this.repository});
+
+  Future<void> init(BuildContext ctx) async {
+    try {
+      types = await repository.getAllType();
+       
+      for ( var i = 0; i <  types.length ; i++ ) {
+          _imageFiles.add(_imageFile);  // Agregar la imagen a la lista
+        }
+
+      notifyListeners();
+    } catch(xe){
+      showMessage(ctx,'Ocurrió un error inesperado, intentar mas rato');
+    }
+  }
 
   Future<void> onSave (BuildContext ctx) async{
     bool valid = false;
@@ -47,10 +64,12 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
           else showMessage(ctx, 'Ocurrió un error intentar mas rato');
         }
       }*/
-      var _ruc = '111';
-      var model = PhotoModel(ruc: _ruc, archivo: '${_ruc}_1', ruta: _imageFile?.path ?? '');
+      //var model = PhotoModel(ruc: _ruc, archivo: '${_ruc}_1', tipo: , ruta: _imageFile?.path ?? '');
+      bool result = false;
+      for(var model in photos){
+        result = await repository.postSavePhoto(model);
+      }
 
-      var result =  await repository.postSavePhoto(model);
       if (result) showMessage(ctx, 'Se guardo con exito');
       else showMessage(ctx, 'Ocurrió un error intentar mas rato');
     } catch (xe ) {
@@ -113,7 +132,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
      
   }
 
-  Future<void> takePhoto(BuildContext ctx) async {
+  Future<void> takePhoto(BuildContext ctx, int i, String id) async {
     try {
       /*
       bool hasPermission = await _permissionService.requestCameraPermission(ctx);
@@ -122,14 +141,19 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
         showMessage(ctx, 'Permiso de cámara denegado ❌')
         return;
       } */
-
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+      if (!photos.isNotEmpty) photos.removeWhere((c) => c.ruc == _ruc && c.tipo == id );
 
       if (pickedFile != null) {
         print(pickedFile.path);
         
         _imageFile = File(pickedFile.path);
-        
+        _imageFiles[i] = _imageFile;
+
+        var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${id}', tipo: id, ruta: _imageFile?.path ?? '');
+        photos.add(photo);
+
         notifyListeners(); // Notifica a la UI que hay una nueva imagen
       } else {
         _showError(ctx, "No se tomó ninguna foto.");
@@ -145,5 +169,6 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
       SnackBar(content: Text(message, style: TextStyle(color: Colors.white)), backgroundColor: Colors.red),
     );
   }
+
 
 }
