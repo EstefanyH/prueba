@@ -36,6 +36,10 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
 
   Future<void> init(BuildContext ctx) async {
     try {
+      types = [];
+      _imageFiles = [];
+      photos = [];
+      
       _cia = await repository.getCia();
 
       if (_cia != null){
@@ -164,7 +168,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
         print('fecha: ${formattedDateTime}');
 
         //var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${id}', tipo: id, ruta: _imageFile?.path ?? '');
-        var photo = PhotoModel(ruc: _ruc, archivo: '${formattedDateTime}_${tipo}.jpg', tipo: tipo, ruta: _imageFile?.path ?? '');
+        var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${tipo}.jpg', tipo: tipo, ruta: _imageFile?.path ?? '');
         photos.add(photo);
 
         notifyListeners(); // Notifica a la UI que hay una nueva imagen

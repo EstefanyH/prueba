@@ -59,7 +59,8 @@ final class ApiService {
 
       // Agregar los encabezados (si es necesario)
       request.headers.addAll({
-        'Content-Type': mimeType != null ? mimeType : 'application/octet-stream',
+        //'Content-Type': mimeType != null ? mimeType : 'application/octet-stream',
+        'Content-Type': 'image/jpeg'
         //'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Si se requiere un token de autenticación
       });
 

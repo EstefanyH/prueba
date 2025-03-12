@@ -22,11 +22,21 @@ class PhotoView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ElevatedButton(
+                onPressed: () async {
+                  await viewModel.onSave(context);
+                }, 
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text('Guarda')
+                  ],
+                )),
+              SizedBoxH10(),
               Expanded(
                 child: ListView.builder(
                   itemCount: viewModel.types.length,
-                  itemBuilder: (context, index) {
-                    
+                  itemBuilder: (context, index) {         
                     var row = viewModel.types[index];
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -54,18 +64,7 @@ class PhotoView extends StatelessWidget {
                         
                       ]
                     );
-                  })),
-              SizedBoxH10(),
-              ElevatedButton(
-                onPressed: () async {
-                  await viewModel.onSave(context);
-                }, 
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text('Guarda')
-                  ],
-                ))
+                  }))
             ]
           );
         },)

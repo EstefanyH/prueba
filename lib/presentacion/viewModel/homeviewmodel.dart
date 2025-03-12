@@ -35,15 +35,21 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
   Future<void> onDownloadType (BuildContext ctx) async {
     try {
       bool isConnect = await PermissionService.isInternetAvailable();
-      if (isConnect) {
-        var result = await repository.getListType();
-        if(result == true) {
-          showMessage(ctx, 'Se completo descarga');
+      
+      var items = await repository.getTypeLocal();
+
+      if (!items.isEmpty) showMessage(ctx, 'Ya existen elementos');
+      else {
+        if (isConnect) {
+          var result = await repository.getListType();
+          if(result == true) {
+            showMessage(ctx, 'Se completo descarga');
+          }
+        } else {
+          showMessage(ctx, 'No hay conección a internet');
         }
-      } else {
-        showMessage(ctx, 'No hay conección a internet');
       }
-    } catch( xe) {
+    } catch(xe) {
       throw Exception(xe);
     }
   }

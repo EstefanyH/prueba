@@ -34,15 +34,30 @@ class PhotoRepositoryImpl extends PhotoRepository{
         var data = shared.getString(AppConstant.p_cia);
         var toJson = jsonDecode(data ?? '');
         // guardando restaurant local
-        await dao.register(toJson);
+        /*await dao.register(toJson);
 
         if(!photos.isEmpty) {
           for(PhotoModel photo in photos) {
+            
             await postSavePhoto(photo);
           }
-        }
+        }*/
         
-        //if (isconnect) resultado = await datasource.fetchNewCia(toJson);
+        if (isconnect) {
+          resultado = await datasource.fetchNewCia(toJson);
+
+          bool presult = false;
+          
+          if(resultado) {
+            for(PhotoModel photo in photos) {
+              String uri = await datasource.fetchUriPhoto(photo.archivo);
+              File _file = File(photo.ruta);
+              print(photo.archivo);
+              presult = await datasource.fetchPhoto(uri, _file);
+            }
+          }
+
+        }
         resultado = true;
       }catch( xe ) {
         throw Exception(xe);
