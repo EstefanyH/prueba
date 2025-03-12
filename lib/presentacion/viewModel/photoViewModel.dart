@@ -70,7 +70,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
           if (valid){
             bool isconnect = await PermissionService.isInternetAvailable();
 
-            valid = await repository.postSaveData(false, photos);
+            valid = await repository.postSaveData(isconnect, photos);
             if (valid) {
               clear();
               showMessage(ctx, 'Operación exitosa');

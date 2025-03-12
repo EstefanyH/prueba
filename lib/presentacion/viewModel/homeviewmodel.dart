@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -41,19 +42,34 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
 
   Future<void> init(BuildContext ctx) async {
     print('HomeViewModel');
-    try {
-    totPending = await repository.getTotPending();
-    lista = await repository.getTotRegister();
-    totRegister = lista.length;
-
+    try {    
     await getCurrentLocation();
+    await onLoadData();
+    //totPending = await repository.getTotPending();
+    //lista = await repository.getTotRegister();
+    //totRegister = lista.length;
+
+
     notifyListeners();
     } catch(xe){
       showMessage(ctx, 'Ocurrio un error intentar mas rato');
     }
 
   }
+  Future<void> onLoadData() async {
+    totPending = await repository.getTotPending();
+    lista = await repository.getTotRegister();
+    totRegister = lista.length;
 
+    for(var p in lista) {
+      double _lat = double.parse(p.latitude);
+      double _lon = double.parse(p.longitude);
+      
+      var position = LatLng(_lat, _lon);
+
+      locations.add(position);
+    }
+  }
   void onGoToNew(BuildContext ctx) async {
      Navigator.pushNamed(ctx, Routermanager.restaurant);
   }
