@@ -21,7 +21,9 @@ class PhotoDatasourceImpl extends PhotoDatasource {
   @override
   Future<bool> fetchNewCia(Map<String, dynamic> model) async {
     var response = await api.post(ApiConfig.createRestaurant, model);
-     //await ResponseModel.fromJson(response);
+    print('seteo');
+    print(response);
+    
     if (response != null) {
       var model = ResponseModel.fromJson(response);
       if (model != null) {

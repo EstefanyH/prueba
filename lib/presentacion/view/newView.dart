@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba/domain/entities/position.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/presentacion/viewModel/newViewModel.dart';
 
 class NewView extends StatelessWidget {
-
-  const NewView({ super.key });
+  final Positions model;
+  
+  const NewView({ super.key, required this.model });
 
   @override
   Widget build(BuildContext context) {
     print('---------- NewView');
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+        context.read<NewViewModel>().position = model;
         context.read<NewViewModel>().init();
     });
 

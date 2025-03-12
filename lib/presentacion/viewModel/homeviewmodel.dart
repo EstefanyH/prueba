@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +7,9 @@ import 'package:latlong2/latlong.dart';
 import 'package:prueba/config/router/routerManager.dart';
 import 'package:prueba/core/baseViewModel.dart';
 import 'package:prueba/core/services/permission_service.dart';
+import 'package:prueba/data/model/position.model.dart';
+import 'package:prueba/domain/entities/cia.dart';
+import 'package:prueba/domain/entities/position.dart';
 import 'package:prueba/domain/repository/home.repository.dart';
 
 class HomeViewModel extends BaseViewModel with ChangeNotifier {
@@ -20,11 +24,18 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
   double latitude = 0.0;
   double longitude = 0.0;
 
-
-  String _backgroundMessage = 'No hay mensaje de fondo aún';
   late Timer _timer;
 
-  String get backgroundMessage => _backgroundMessage;
+  final List<LatLng> locations = [];
+  /*
+  final List<LatLng> locations = [
+    LatLng(37.7749, -122.4194), // San Francisco
+    LatLng(34.0522, -118.2437), // Los Angeles
+    LatLng(40.7128, -74.0060),  // New York
+    LatLng(51.5074, -0.1278),   // London
+  ]; */
+
+  List<Cia> lista = [];
 
   late LatLng markerPosition;
 
@@ -32,7 +43,8 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
     print('HomeViewModel');
     try {
     totPending = await repository.getTotPending();
-    totRegister = await repository.getTotRegister();
+    lista = await repository.getTotRegister();
+    totRegister = lista.length;
 
     await getCurrentLocation();
     notifyListeners();
@@ -87,6 +99,7 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
     longitude = position.longitude;
     markerPosition = LatLng(latitude, longitude);
 
+    locations.add(markerPosition);
     // Notificar a la vista para que se actualice
     notifyListeners();
   }
@@ -99,7 +112,8 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
       if (isconnect) {
 
         totPending = await repository.getTotPending();
-        totRegister = await repository.getTotRegister();
+        lista = await repository.getTotRegister();
+        totRegister = lista.length;
 
         await repository.getRegisterPending(); 
 
@@ -108,19 +122,13 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
     });
   }
 
-  /*void startBackgroundTask(BuildContext ctx) {
-    Future.delayed(Duration(seconds: 5), () async{
-      _backgroundMessage = 'Tarea en segundo plano completada!';
-
-      bool isconnect = await PermissionService.isInternetAvailable();
-      
-      if (isconnect){
-        await repository.getRegisterPending();
-      }
- 
-      notifyListeners(); // Notifica a la UI que el mensaje ha cambiado
-      print('Tarea en segundo plano completada!');
-    });
-  } */
+  void goToNewRestaurant(BuildContext ctx, LatLng model ) async {
+    
+    var  _position = PositionsModel(latitude: model.latitude.toString(), longitude: model.longitude.toString() );
+    var data = _position.toJson();
+    print('new dato');
+    print(data);
+    await Navigator.pushNamed(ctx, Routermanager.restaurant, arguments: data);
+  }
 
 }

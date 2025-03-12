@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:prueba/core/widgets/titlebanner.dart';
+import 'package:prueba/domain/entities/position.dart'; 
 import 'package:prueba/presentacion/view/newView.dart';
 import 'package:prueba/presentacion/view/photoView.dart';
 import 'package:prueba/presentacion/viewModel/restaurantViewModel.dart';
 
 class RestaurantView extends StatelessWidget {
-  const RestaurantView({super.key});
+  final Positions model;
+
+  const RestaurantView({super.key, required this.model});
   
   @override
   Widget build(BuildContext context) {
@@ -45,7 +48,7 @@ class RestaurantView extends StatelessWidget {
                 ),
                 Expanded(
                   child: viewModel.selectedIndex == 0 ? 
-                    NewView() : PhotoView() ,                  
+                    NewView(model: model) : PhotoView() ,                  
                 )
               ],
             ),);

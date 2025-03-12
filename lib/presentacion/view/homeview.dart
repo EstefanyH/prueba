@@ -28,11 +28,6 @@ class HomeView extends StatelessWidget {
               context.read<HomeViewModel>().init(context);
             }, 
             icon: Icon(Icons.update)),
-          IconButton(
-            onPressed: () async {
-              Navigator.pushNamed(context, Routermanager.restaurant);
-            }, 
-            icon: Icon(Icons.store))
         ],),
       backgroundColor: Colors.white,
       body: Consumer<HomeViewModel>(
@@ -69,25 +64,31 @@ class HomeView extends StatelessWidget {
                         : FlutterMap(
                             options: MapOptions(
                               initialCenter: viewModel.markerPosition, // Centrado en la ubicación actual
-                              initialZoom: 15.0, // Zoom adecuado para la ubicación
+                              initialZoom: 15.0,
+                              onTap: (tapPosition, point) async {
+                                print(point);
+                                viewModel.goToNewRestaurant(context, point);
+                              } // Zoom adecuado para la ubicación
                             ),
                             children: [
                               TileLayer(
                                 urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                                 subdomains: ['a', 'b', 'c'],),
-                              MarkerLayer(markers:  [
-                                  Marker(
-                                    width: 80.0,
-                                    height: 80.0,
-                                    point: viewModel.markerPosition,
-                                    child:  Icon(
-                                      Icons.location_on,
-                                      color: Colors.red,
-                                      size: 40,
-                                    ),
+                                  MarkerLayer(
+                                    markers: viewModel.locations.map((location) {
+                                      return Marker(
+                                        width: 80.0,
+                                        height: 80.0,
+                                        point: location,
+                                        child: Icon(
+                                          Icons.location_on,
+                                          color: Colors.red,
+                                          size: 40,
+                                        ),
+                                      );
+                                    }).toList(),
                                   ),
-                                ],),
-                            ],
+                                ],
                           ),
                   )
               ],

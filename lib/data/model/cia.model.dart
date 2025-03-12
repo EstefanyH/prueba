@@ -10,6 +10,7 @@ class CiaModel extends Cia {
     required super.comment});
   
   factory CiaModel.fromJson(Map<String, dynamic> json) {
+    
     return CiaModel(
       name: json['name'], 
       ruc: json['ruc'], 

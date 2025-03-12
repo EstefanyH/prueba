@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:prueba/data/model/position.model.dart';
 import 'package:prueba/presentacion/view/homeView.dart';
 import 'package:prueba/presentacion/view/restaurantView.dart';
 
@@ -13,7 +14,11 @@ class Routermanager {
       case home:
         return MaterialPageRoute(builder: (_) => const  HomeView());
       case restaurant:
-        return MaterialPageRoute(builder: (_) => const  RestaurantView());
+        final args = settings.arguments as Map<String, dynamic>;
+        final model = PositionsModel.fromJson(args);
+        print('enviar');
+        print(model);
+        return MaterialPageRoute(builder: (_) =>  RestaurantView(model: model));
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

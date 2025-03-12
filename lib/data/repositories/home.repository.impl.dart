@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:prueba/data/source/home.datasource.dart';
+import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/entities/restaurant.dart';
 import 'package:prueba/domain/entities/type_photo.dart';
 import 'package:prueba/domain/repository/home.repository.dart';
@@ -16,7 +17,7 @@ class HomeRepositoryImpl  implements HomeRepository {
   }
   
   @override
-  Future<int> getTotRegister() async {
+  Future<List<Cia>> getTotRegister() async {
     return await datasource.fetchTotRegister();
   }
   

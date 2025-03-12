@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:prueba/core/baseViewModel.dart';
-import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/data/model/cia.model.dart';
+import 'package:prueba/domain/entities/position.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/new.repository.dart';
 
@@ -10,6 +9,8 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
   final NewRepository repository;
   
   NewViewModel({required this.repository});
+
+  Positions? position;
 
   TextEditingController name_controller = TextEditingController();
   TextEditingController ruc_controller = TextEditingController();
@@ -22,8 +23,13 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
   Future<void> init() async {
     clear();
     try {
-      await getCurrentLocation();
-      
+      //await getCurrentLocation();
+      _latitud = position?.latitude ?? '';
+      _longitud = position?.longitude ?? '';
+
+      latitude_controller.text  = _latitud;
+      longitude_controller.text = _longitud;
+
     } catch (xe) {
       print(xe);
     }
@@ -56,29 +62,6 @@ class NewViewModel extends BaseViewModel with ChangeNotifier {
       comment: _comment);
 
     repository.getSave(model);
-  }
-
-    Future<void> getCurrentLocation() async {
-    bool serviceEnabled;
-
-    serviceEnabled = await PermissionService.checkAndRequestPermissions();
-    if (!serviceEnabled) {
-      print('No se tienen los permisos necesarios para acceder a la ubicación');
-      return;
-    }
-
-    // Obtener la ubicación actual
-    Position position = await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
-
-    // Actualizar los valores de latitud y longitud
-    _latitud = position.latitude.toString();
-    _longitud = position.longitude.toString();
-    
-    latitude_controller.text  = _latitud;
-    longitude_controller.text = _longitud;
-    notifyListeners();
   }
 
 }

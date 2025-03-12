@@ -9,13 +9,14 @@ import 'package:prueba/data/model/cia.model.dart';
 import 'package:prueba/data/model/photo.model.dart';
 import 'package:prueba/data/model/response.model.dart';
 import 'package:prueba/data/model/type_photo.model.dart';
+import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/entities/restaurant.dart';
 import 'package:prueba/domain/entities/type_photo.dart';
 
 abstract class HomeDatasource {
   Future<bool> fetchListType();
   Future<int> fetchTotPending();
-  Future<int> fetchTotRegister();
+  Future<List<Cia>> fetchTotRegister();
   Future<List<TypePhoto>> fetchTypeLocal();
   Future<Restaurant> fetchListPending();
 
@@ -45,9 +46,8 @@ class HomeDatasourceImpl implements HomeDatasource {
   }
 
   @override
-  Future<int> fetchTotRegister() async {
-    var list = await dao.getList(); 
-    return list.length;
+  Future<List<Cia>> fetchTotRegister() async {
+    return await dao.getList(); 
   }
   
   @override
@@ -88,6 +88,9 @@ class HomeDatasourceImpl implements HomeDatasource {
   @override
   Future<bool> fetchNewCia(Map<String, dynamic> model) async {
     var response = await api.post(ApiConfig.createRestaurant, model);
+    print('seteo');
+    print(response);
+
     if (response != null) {
       var data = ResponseModel.fromJson(response);
       //if (data.data != null) {
