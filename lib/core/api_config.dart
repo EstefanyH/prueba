@@ -5,5 +5,5 @@ class ApiConfig {
   static const String searchRestaurant = '$baseUrl/restaurants/9185c67d-3147-4625-b911-0deb644edf5e';
   static const String uploadPhoto = '$baseUrl/signed-url?fileName=1903456789123_1.jpg';
   static const String listPhoto = '$baseUrl/photo-types';
-  static const String searchPhoto = '$baseUrl/signed-url?fileName=1903456789123_1.jpg';
+  static const String urlImage = '$baseUrl/signed-url?fileName=';
 }

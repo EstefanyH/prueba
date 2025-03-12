@@ -29,18 +29,24 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   List<TypePhoto> types = [];
   List<PhotoModel> photos = [];
 
-  String _ruc = '111';
+  String _ruc = '';
+  Cia? _cia;
 
   PhotoViewModel({required this.repository});
 
   Future<void> init(BuildContext ctx) async {
     try {
-      types = await repository.getAllType();
-       
-      for ( var i = 0; i <  types.length ; i++ ) {
+      _cia = await repository.getCia();
+
+      if (_cia != null){
+        _ruc = _cia?.ruc ?? '';
+        types = await repository.getAllType();
+        for ( var i = 0; i <  types.length ; i++ ) {
           _imageFiles.add(_imageFile);  // Agregar la imagen a la lista
         }
-
+      }  
+      if(_ruc.isEmpty) showMessage(ctx, 'Completar datos del restaurante');
+      
       notifyListeners();
     } catch(xe){
       showMessage(ctx,'Ocurrió un error inesperado, intentar mas rato');
@@ -50,7 +56,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   Future<void> onSave (BuildContext ctx) async{
     bool valid = false;
     try {
-      /*
+      
       var model = await repository.getCia();
       if (model == null) {
         showMessage(ctx, 'Completar datos de restaurante');
@@ -59,19 +65,19 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
         if (valid){
           bool isconnect = await PermissionService.isInternetAvailable();
 
-          valid = await repository.postSaveData(isconnect);
+          valid = await repository.postSaveData(isconnect, photos);
           if (valid) showMessage(ctx, 'Operación exitosa');
           else showMessage(ctx, 'Ocurrió un error intentar mas rato');
         }
-      }*/
-      //var model = PhotoModel(ruc: _ruc, archivo: '${_ruc}_1', tipo: , ruta: _imageFile?.path ?? '');
+      }
+      /*
       bool result = false;
       for(var model in photos){
         result = await repository.postSavePhoto(model);
-      }
+      }*/
 
-      if (result) showMessage(ctx, 'Se guardo con exito');
-      else showMessage(ctx, 'Ocurrió un error intentar mas rato');
+      //if (result) showMessage(ctx, 'Se guardo con exito');
+      //else showMessage(ctx, 'Ocurrió un error intentar mas rato');
     } catch (xe ) {
       showMessage(ctx, 'Ocurrió un error intentar mas rato');
     }
@@ -132,7 +138,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
      
   }
 
-  Future<void> takePhoto(BuildContext ctx, int i, String id) async {
+  Future<void> takePhoto(BuildContext ctx, int i, String tipo) async {
     try {
       /*
       bool hasPermission = await _permissionService.requestCameraPermission(ctx);
@@ -143,7 +149,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
       } */
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-      if (!photos.isNotEmpty) photos.removeWhere((c) => c.ruc == _ruc && c.tipo == id );
+      if (!photos.isNotEmpty) photos.removeWhere((c) => c.ruc == _ruc && c.tipo == tipo );
 
       if (pickedFile != null) {
         print(pickedFile.path);
@@ -151,7 +157,14 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
         _imageFile = File(pickedFile.path);
         _imageFiles[i] = _imageFile;
 
-        var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${id}', tipo: id, ruta: _imageFile?.path ?? '');
+        DateTime now = DateTime.now();
+        String formattedDateTime = "${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}"
+        "${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}";
+
+        print('fecha: ${formattedDateTime}');
+
+        //var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${id}', tipo: id, ruta: _imageFile?.path ?? '');
+        var photo = PhotoModel(ruc: _ruc, archivo: '${formattedDateTime}_${tipo}.jpg', tipo: tipo, ruta: _imageFile?.path ?? '');
         photos.add(photo);
 
         notifyListeners(); // Notifica a la UI que hay una nueva imagen

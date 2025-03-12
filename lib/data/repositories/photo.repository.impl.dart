@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:prueba/core/util/app_constants.dart';
 import 'package:prueba/data/database/cia.dao.dart';
@@ -27,16 +28,22 @@ class PhotoRepositoryImpl extends PhotoRepository{
     required this.shared});
     
     @override
-    Future<bool> postSaveData(bool isconnect) async {
+    Future<bool> postSaveData(bool isconnect, List<PhotoModel> photos) async {
       bool resultado = false;
       try {
         var data = shared.getString(AppConstant.p_cia);
         var toJson = jsonDecode(data ?? '');
         // guardando restaurant local
         await dao.register(toJson);
-        
-        if (isconnect) resultado = await datasource.fetchNewCia(toJson);
 
+        if(!photos.isEmpty) {
+          for(PhotoModel photo in photos) {
+            await postSavePhoto(photo);
+          }
+        }
+        
+        //if (isconnect) resultado = await datasource.fetchNewCia(toJson);
+        resultado = true;
       }catch( xe ) {
         throw Exception(xe);
       }
@@ -72,6 +79,15 @@ class PhotoRepositoryImpl extends PhotoRepository{
   @override
   Future<List<TypePhoto>> getAllType() async {
     return await tdao.getList();
+  }
+
+  Future<String> getUriImage(String name) async {
+    return await datasource.fetchUriPhoto(name);
+  }
+
+  Future<bool> putPhoto(String uri, String path ) async {
+    File _file = File(path);
+    return await datasource.fetchPhoto(uri, _file);
   }
 
 }

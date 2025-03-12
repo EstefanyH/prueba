@@ -4,7 +4,7 @@ import 'package:prueba/core/widgets/dialog.dart';
 class BaseViewModel {
 
   void showMessage(BuildContext context, String msg) {
-    showSnackBar(context, msg, 300);
+    showSnackBar(context, msg, 600);
   }
 
 }
