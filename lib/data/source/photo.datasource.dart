@@ -39,8 +39,7 @@ class PhotoDatasourceImpl extends PhotoDatasource {
   @override
   Future<bool> fetchPhoto(String uri, File file) async {
     var response = await api.put(uri, file);
-    if(response) return true;
-    else return false;
+    return response;
   }
 
 }

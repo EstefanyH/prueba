@@ -34,14 +34,14 @@ class PhotoRepositoryImpl extends PhotoRepository{
         var data = shared.getString(AppConstant.p_cia);
         var toJson = jsonDecode(data ?? '');
         // guardando restaurant local
-        /*await dao.register(toJson);
+        await dao.register(toJson);
 
         if(!photos.isEmpty) {
           for(PhotoModel photo in photos) {
             
             await postSavePhoto(photo);
           }
-        }*/
+        }
         
         if (isconnect) {
           resultado = await datasource.fetchNewCia(toJson);
@@ -55,8 +55,8 @@ class PhotoRepositoryImpl extends PhotoRepository{
               print(photo.archivo);
               presult = await datasource.fetchPhoto(uri, _file);
             }
+            if (presult) shared.removeValue(AppConstant.p_cia);
           }
-
         }
         resultado = true;
       }catch( xe ) {

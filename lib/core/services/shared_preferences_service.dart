@@ -43,4 +43,9 @@ class SharedPreferencesService {
     return null; // Si no existe, devuelve null
   }
 
+  Future<bool> removeValue(String key) async {
+    bool removed = await _preferences.remove(key);  // 'myKey' es la clave del valor que quieres eliminar
+    return (removed) ? true : false;
+  }
+
 }

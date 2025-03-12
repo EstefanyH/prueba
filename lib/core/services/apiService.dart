@@ -40,39 +40,31 @@ final class ApiService {
     }
   }
 
-  Future<dynamic> put(String endpoint, File _image) async {
+  Future<bool> put(String endpoint, File _image) async {
     
     try { 
-      //File _image =  File(filePath);
-
-      // Crear la URL de la API
       var url = Uri.parse(endpoint); // Reemplaza con la URL de tu API
-
-      // Crear la solicitud PUT
       var request = http.Request('PUT', url);
-
-      // Abrir el archivo de la imagen
       var fileBytes = await _image.readAsBytes();
-
-      // Obtener el tipo MIME de la imagen
       final mimeType = lookupMimeType(_image.path);
-
-      // Agregar los encabezados (si es necesario)
+      
       request.headers.addAll({
-        //'Content-Type': mimeType != null ? mimeType : 'application/octet-stream',
         'Content-Type': 'image/jpeg'
-        //'Authorization': 'Bearer YOUR_ACCESS_TOKEN', // Si se requiere un token de autenticación
       });
-
-      // Adjuntar los bytes de la imagen al cuerpo de la solicitud (en formato binario)
+      
       request.bodyBytes = fileBytes;
-
-      // Enviar la solicitud PUT
+      
       final streamedResponse = await request.send();
-      // Convertir el StreamedResponse a http.Response para utilizar la función _handleResponse
+      
       final response = await http.Response.fromStream(streamedResponse);
     
-      return _handleResponse(response);
+     // return _handleResponse(response);
+
+      if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 400) {
+        return true;
+      } else {
+        return false;
+      }
     } catch (e) {
       throw Exception("Error en PUT: $e");
     }
