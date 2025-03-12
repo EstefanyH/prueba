@@ -55,8 +55,6 @@ final class ApiService {
       final streamedResponse = await request.send();
       
       final response = await http.Response.fromStream(streamedResponse);
-    
-     // return _handleResponse(response);
 
       if (response.statusCode == 200 || response.statusCode == 201 || response.statusCode == 400) {
         return true;
@@ -64,7 +62,9 @@ final class ApiService {
         return false;
       }
     } catch (e) {
-      throw Exception("Error en PUT: $e");
+      print("Error en PUT: $e");
+      //throw Exception("Error en PUT: $e");
+      return false;
     }
   }
 

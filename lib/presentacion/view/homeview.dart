@@ -15,6 +15,8 @@ class HomeView extends StatelessWidget {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
         context.read<HomeViewModel>().init(context);
+        context.read<HomeViewModel>().startForegroundTask(context);
+        //context.read<HomeViewModel>().startBackgroundTask(context);
     });
 
     return Scaffold(

@@ -26,7 +26,7 @@ final DatabaseHelper _dbHelper;
     return maps.map((map) => PhotoModel.fromJson(map)).toList();
   }
 
-  Future<int> updateEstado(PhotoModel model) async {
+  Future<int> updateEstado(String _fileName) async {
     final db = await _dbHelper.database;
     Map<String, dynamic> row = {
       DatabaseHelper.colEnviado : 1
@@ -35,8 +35,8 @@ final DatabaseHelper _dbHelper;
     return await db.update(
       tbName,
       row,
-      where: 'ruc = ?',
-      whereArgs: [model.ruc],
+      where: 'archivo = ?',
+      whereArgs: [_fileName],
     );
   }
 

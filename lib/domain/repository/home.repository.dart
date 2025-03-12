@@ -6,4 +6,6 @@ abstract class HomeRepository {
   Future<int> getTotPending();
   Future<int> getTotRegister();
   Future<List<TypePhoto>> getTypeLocal();
+
+  Future<bool> getRegisterPending();
 }

@@ -45,8 +45,7 @@ class PhotoRepositoryImpl extends PhotoRepository{
         
         if (isconnect) {
           resultado = await datasource.fetchNewCia(toJson);
-
-          await dao.updateEstado(CiaModel.fromJson(toJson));
+          //await dao.updateEstado(CiaModel.fromJson(toJson));
 
           bool presult = false;
           
@@ -57,7 +56,7 @@ class PhotoRepositoryImpl extends PhotoRepository{
               print(photo.archivo);
               presult = await datasource.fetchPhoto(uri, _file);
 
-              if(presult) await pdao.updateEstado(photo);
+              if(presult) await pdao.updateEstado(photo.archivo);
             }
 
             if (presult) {

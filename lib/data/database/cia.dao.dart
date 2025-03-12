@@ -31,7 +31,7 @@ class CiaDao {
     return maps.map((map) => CiaModel.fromJson(map)).toList();
   }
 
-  Future<int> updateEstado(CiaModel model) async {
+  Future<int> updateEstado(String ruc) async {
     final db = await _dbHelper.database;
     Map<String, dynamic> row = {
       DatabaseHelper.colEnviado : 1
@@ -41,7 +41,7 @@ class CiaDao {
       tbName,
       row,
       where: 'ruc = ?',
-      whereArgs: [model.ruc],
+      whereArgs: [ruc],
     );
   }
 

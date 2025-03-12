@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -14,8 +16,15 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
   late var totPending = 0;
   late var totRegister = 0;
   
+
   double latitude = 0.0;
   double longitude = 0.0;
+
+
+  String _backgroundMessage = 'No hay mensaje de fondo aún';
+  late Timer _timer;
+
+  String get backgroundMessage => _backgroundMessage;
 
   late LatLng markerPosition;
 
@@ -81,5 +90,37 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
     // Notificar a la vista para que se actualice
     notifyListeners();
   }
+
+   // Método que realiza la consulta en primer plano cada 10 segundos
+  void startForegroundTask(BuildContext ctx) {
+    _timer = Timer.periodic(Duration(seconds: 20), (timer) async {
+      print('Realizando consulta en primer plano...');
+      bool isconnect = await PermissionService.isInternetAvailable();
+      if (isconnect) {
+
+        totPending = await repository.getTotPending();
+        totRegister = await repository.getTotRegister();
+
+        await repository.getRegisterPending(); 
+
+      } 
+      notifyListeners(); // Notifica a la UI que los datos han cambiado
+    });
+  }
+
+  /*void startBackgroundTask(BuildContext ctx) {
+    Future.delayed(Duration(seconds: 5), () async{
+      _backgroundMessage = 'Tarea en segundo plano completada!';
+
+      bool isconnect = await PermissionService.isInternetAvailable();
+      
+      if (isconnect){
+        await repository.getRegisterPending();
+      }
+ 
+      notifyListeners(); // Notifica a la UI que el mensaje ha cambiado
+      print('Tarea en segundo plano completada!');
+    });
+  } */
 
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:prueba/core/baseViewModel.dart';
 import 'package:prueba/core/services/camera_service.dart';
 import 'package:prueba/core/services/permission_service.dart';
@@ -13,6 +14,8 @@ import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/entities/type_photo.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/photo.repository.dart';
+
+import 'package:path/path.dart' as p;
 
 class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   final PhotoRepository repository;
@@ -67,7 +70,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
           if (valid){
             bool isconnect = await PermissionService.isInternetAvailable();
 
-            valid = await repository.postSaveData(isconnect, photos);
+            valid = await repository.postSaveData(false, photos);
             if (valid) {
               clear();
               showMessage(ctx, 'Operación exitosa');
@@ -168,14 +171,36 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
           _imageFile = File(pickedFile.path);
           _imageFiles[i] = _imageFile;
 
+
           DateTime now = DateTime.now();
           String formattedDateTime = "${now.year}${now.month.toString().padLeft(2, '0')}${now.day.toString().padLeft(2, '0')}"
           "${now.hour.toString().padLeft(2, '0')}${now.minute.toString().padLeft(2, '0')}${now.second.toString().padLeft(2, '0')}";
 
           print('fecha: ${formattedDateTime}');
 
+          //Directory tempDir = await getTemporaryDirectory();
+          final tempDir = await getApplicationDocumentsDirectory();
+          final folderName = 'tempFolder';
+          final newFolderPath = '${tempDir.path}/$folderName';
+          final basename =  '${formattedDateTime}.jpg';
+          
+          print('carpeta: ${newFolderPath}');
+
+          final newFolder = Directory(newFolderPath);
+
+          if (!await newFolder.exists()) {
+              // Si no existe, crearla
+              await newFolder.create();    
+          }
+
+          final newruta = p.join(newFolderPath, basename);
+
+          print('ruta: ${newruta}');
+
+          await _imageFile?.copy(newruta);
+
           //var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${id}', tipo: id, ruta: _imageFile?.path ?? '');
-          var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${tipo}.jpg', tipo: tipo, ruta: _imageFile?.path ?? '');
+          var photo = PhotoModel(ruc: _ruc, archivo: '${_ruc}_${tipo}.jpg', tipo: tipo, ruta: newruta ?? '');
           photos.add(photo);
 
           notifyListeners(); // Notifica a la UI que hay una nueva imagen

@@ -47,10 +47,10 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<PhotoDao>(() => PhotoDao(sl.get()));
   sl.registerLazySingleton<TypePhotoDao>(() => TypePhotoDao(sl.get()));
 
-  sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(dao: sl.get(), type: sl.get(), api: sl.get()));
+  sl.registerLazySingleton<HomeDatasource>(() => HomeDatasourceImpl(dao: sl.get(), type: sl.get(), api: sl.get(), pdao: sl.get()));
   sl.registerLazySingleton<RestaurantDatasource>(() => RestaurantDatasourceImpl(dao: sl.get()));
   sl.registerLazySingleton<NewDatasource>(() => NewDatasourceImpl());
-  sl.registerLazySingleton<PhotoDatasource>(() => PhotoDatasourceImpl(api: sl.get()));
+  sl.registerLazySingleton<PhotoDatasource>(() => PhotoDatasourceImpl(api: sl.get(), dao: sl.get()));
 
   sl.registerLazySingleton<HomeRepository>(() => HomeRepositoryImpl(datasource: sl.get()));
   sl.registerLazySingleton<RestaurantRepository>(() => RestaurantRepositoryImpl(datasource: sl.get<RestaurantDatasource>()));

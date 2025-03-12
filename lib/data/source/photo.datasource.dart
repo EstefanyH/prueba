@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:prueba/core/api_config.dart';
 import 'package:prueba/core/services/apiService.dart';
+import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/data/model/response.model.dart';
 
 abstract class PhotoDatasource {
@@ -10,10 +11,12 @@ abstract class PhotoDatasource {
 }
 
 class PhotoDatasourceImpl extends PhotoDatasource {
-
+  final CiaDao dao;
   final ApiService api;
 
-  PhotoDatasourceImpl({required this.api});
+  PhotoDatasourceImpl({
+    required this.dao,
+    required this.api});
   
   @override
   Future<bool> fetchNewCia(Map<String, dynamic> model) async {
@@ -22,7 +25,9 @@ class PhotoDatasourceImpl extends PhotoDatasource {
     if (response != null) {
       var model = ResponseModel.fromJson(response);
       if (model != null) {
-        print(model.data);
+        var _ruc = model.data!['ruc']; 
+        print('ruc: ${_ruc}');
+        await dao.updateEstado(_ruc);
       }  
       return true;
     }
