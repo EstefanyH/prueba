@@ -45,11 +45,10 @@ class PhotoView extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Etiqueta foto ${index + 1} - ${row.name}'),
+                            Text('Foto ${index + 1} - ${row.name}'),
                             IconButton(
                               onPressed: () async {
                                 await viewModel.takePhoto(context, index, row.uuid );
-                                //await viewModel.onShowOpenModal(context, PhotoSide.front);
                               }, 
                               icon: Icon(Icons.camera_alt_rounded))
                           ],
