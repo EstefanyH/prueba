@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:prueba/core/separator.dart';
 import 'package:prueba/presentacion/viewModel/photoViewModel.dart';
 
 class PhotoView extends StatelessWidget {
@@ -22,7 +23,7 @@ class PhotoView extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Etiqueta foto 1'),
+                  Text('Etiqueta foto 1 - Frontal'),
                   IconButton(
                     onPressed: () async {
                        await viewModel.takePhoto(context);
@@ -31,18 +32,25 @@ class PhotoView extends StatelessWidget {
                     icon: Icon(Icons.camera_alt_rounded))
                 ],
               ),
-               viewModel.imageFile != null
+              
+              viewModel.imageFile != null
                       ? Image.file(viewModel.imageFile!, height: 200, fit: BoxFit.cover)
                       : Image(
                           image: AssetImage('assets/image/desconocido.png'), 
                           height: 200, 
                           fit: BoxFit.cover),
-               
+                          
+              SizedBoxH10(),
               ElevatedButton(
                 onPressed: () async {
                   await viewModel.onSave(context);
                 }, 
-                child: Text('Guarda'))
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Text('Guarda')
+                  ],
+                ))
             ]
           );
         },)

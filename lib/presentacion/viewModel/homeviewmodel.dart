@@ -4,7 +4,6 @@ import 'package:latlong2/latlong.dart';
 import 'package:prueba/config/router/routerManager.dart';
 import 'package:prueba/core/baseViewModel.dart';
 import 'package:prueba/core/services/permission_service.dart';
-import 'package:prueba/domain/entities/type_photo.dart';
 import 'package:prueba/domain/repository/home.repository.dart';
 
 class HomeViewModel extends BaseViewModel with ChangeNotifier {
@@ -45,7 +44,7 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
         showMessage(ctx, 'No hay conección a internet');
       }
     } catch( xe) {
-      print(xe);
+      throw Exception(xe);
     }
   }
 

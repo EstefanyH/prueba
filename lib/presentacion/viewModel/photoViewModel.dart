@@ -8,7 +8,9 @@ import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/core/service_locator.dart';
 import 'package:prueba/core/util/callback.dart';
 import 'package:prueba/core/widgets/camera.dart';
+import 'package:prueba/data/model/photo.model.dart';
 import 'package:prueba/domain/entities/cia.dart';
+import 'package:prueba/domain/entities/photo.dart';
 import 'package:prueba/domain/enums/app_Enums.dart';
 import 'package:prueba/domain/repository/photo.repository.dart';
 
@@ -31,6 +33,7 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   Future<void> onSave (BuildContext ctx) async{
     bool valid = false;
     try {
+      /*
       var model = await repository.getCia();
       if (model == null) {
         showMessage(ctx, 'Completar datos de restaurante');
@@ -38,12 +41,18 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
          valid = isValid(ctx, model);
         if (valid){
           bool isconnect = await PermissionService.isInternetAvailable();
+
           valid = await repository.postSaveData(isconnect);
           if (valid) showMessage(ctx, 'Operación exitosa');
           else showMessage(ctx, 'Ocurrió un error intentar mas rato');
         }
-      }
+      }*/
+      var _ruc = '111';
+      var model = PhotoModel(ruc: _ruc, archivo: '${_ruc}_1', ruta: _imageFile?.path ?? '');
 
+      var result =  await repository.postSavePhoto(model);
+      if (result) showMessage(ctx, 'Se guardo con exito');
+      else showMessage(ctx, 'Ocurrió un error intentar mas rato');
     } catch (xe ) {
       showMessage(ctx, 'Ocurrió un error intentar mas rato');
     }
@@ -106,14 +115,13 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
 
   Future<void> takePhoto(BuildContext ctx) async {
     try {
-      /*bool hasPermission = await _permissionService.requestCameraPermission(ctx);
-
+      /*
+      bool hasPermission = await _permissionService.requestCameraPermission(ctx);
+      
       if (!hasPermission) {
-        ScaffoldMessenger.of(ctx).showSnackBar(
-          SnackBar(content: Text("Permiso de cámara denegado ❌")),
-        );
+        showMessage(ctx, 'Permiso de cámara denegado ❌')
         return;
-      }*/
+      } */
 
       final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 

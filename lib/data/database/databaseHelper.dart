@@ -16,14 +16,14 @@ class DatabaseHelper {
     static const String colLatitud = 'latitude';
     static const String colLongitud = 'longitude';
     static const String colComentario = 'comment';
-    static const String colisEnviado = 'enviado'; // 1: online, 0: offline
+    static const String colEnviado = 'enviado'; // 1: online, 0: offline
 
-    static const String colruta = 'ruta';
-    static const String colarchivo = 'archivo';
+    static const String colRuta = 'ruta';
+    static const String colArchivo = 'archivo';
 
-    static const String coluuid = 'uuid';
-    static const String colname = 'name';
-    static const String coldescription = 'description';
+    static const String colUuid = 'uuid';
+    static const String colName = 'name';
+    static const String colDescription = 'description';
 
     static final DatabaseHelper _instance = DatabaseHelper._internal();
     factory DatabaseHelper() => _instance;
@@ -56,25 +56,25 @@ class DatabaseHelper {
             $colLatitud TEXT NOT NULL,
             $colLongitud TEXT NOT NULL,
             $colComentario TEXT NOT NULL,
-            $colisEnviado INTEGER
+            $colEnviado INTEGER
             );
         ''');
 
         await db.execute('''
             CREATE TABLE $tbFotos (
             $colId INTEGER PRIMARY KEY AUTOINCREMENT,
-            $colRuc INTEGER,
-            $colarchivo TEXT NOT NULL,
-            $colruta TEXT NOT NULL,
-            $colisEnviado INTEGER
+            $colRuc TEXT NOT NULL,
+            $colArchivo TEXT NOT NULL,
+            $colRuta TEXT NOT NULL,
+            $colEnviado INTEGER
             );
         ''');
 
         await db.execute('''
             CREATE TABLE $tbTipo (
-            $coluuid TEXT PRIMARY KEY ,
-            $colname TEXT NOT NULL,
-            $coldescription TEXT NOT NULL
+            $colUuid TEXT PRIMARY KEY ,
+            $colName TEXT NOT NULL,
+            $colDescription TEXT NOT NULL
             );
         ''');
     }

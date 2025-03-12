@@ -20,7 +20,7 @@ class CiaDao {
   Future<List<CiaModel>> getListOffOnline() async {
     final db = await _dbHelper.database;
     List<Map<String, dynamic>> maps = await db.query(tbName,
-    where: '${DatabaseHelper.colisEnviado} == ?',
+    where: '${DatabaseHelper.colEnviado} == ?',
     whereArgs: [0] );
     return maps.map((map) => CiaModel.fromJson(map)).toList();
   }

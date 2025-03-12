@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:prueba/core/services/permission_service.dart';
 import 'package:prueba/core/util/app_constants.dart';
 import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/core/services/shared_preferences_service.dart';
+import 'package:prueba/data/database/photo.dao.dart';
 import 'package:prueba/data/model/cia.model.dart';
+import 'package:prueba/data/model/photo.model.dart';
 import 'package:prueba/data/source/photo.datasource.dart';
 import 'package:prueba/domain/entities/cia.dart';
 import 'package:prueba/domain/repository/photo.repository.dart';
@@ -12,11 +13,13 @@ import 'package:prueba/domain/repository/photo.repository.dart';
 class PhotoRepositoryImpl extends PhotoRepository{
   final PhotoDatasource datasource;
   final CiaDao dao;
+  final PhotoDao pdao;
   final SharedPreferencesService shared;
 
   PhotoRepositoryImpl({
     required this.datasource,
     required this.dao,
+    required this.pdao,
     required this.shared});
     
     @override
@@ -28,15 +31,10 @@ class PhotoRepositoryImpl extends PhotoRepository{
         // guardando restaurant local
         await dao.register(toJson);
         
-        print(toJson);
-       /* print(data);
-        Map<String, dynamic> data1 = json.decode(data.toString());
-        print(data1);*/
-
         if (isconnect) resultado = await datasource.fetchNewCia(toJson);
 
       }catch( xe ) {
-        throw xe;
+        throw Exception(xe);
       }
       return resultado;
     }
@@ -50,7 +48,20 @@ class PhotoRepositoryImpl extends PhotoRepository{
         return CiaModel.fromJson(toJson);
       } else return null;
     }catch (xe){
-      throw xe;
+      throw Exception(xe);
+    }
+  }
+
+  @override
+  Future<bool> postSavePhoto(PhotoModel model) async {
+    try {
+      bool resultado = false;
+      var id =  await pdao.register(model);
+      if(id > 0) resultado = true;
+      return resultado;
+      
+    } catch(xe) {
+      throw Exception(xe);
     }
   }
 

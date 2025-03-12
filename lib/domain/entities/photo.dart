@@ -1,5 +1,5 @@
 class Photo {
-  final int ruc;
+  final String ruc;
   final String archivo;
   final String ruta;
 

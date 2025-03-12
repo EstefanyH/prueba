@@ -2,9 +2,7 @@ import 'package:prueba/core/api_config.dart';
 import 'package:prueba/core/services/apiService.dart';
 import 'package:prueba/data/database/cia.dao.dart';
 import 'package:prueba/data/database/type_photo.dao.dart';
-import 'package:prueba/data/model/response.model.dart';
 import 'package:prueba/data/model/type_photo.model.dart';
-import 'package:prueba/domain/entities/type_photo.dart';
 
 abstract class HomeDatasource {
   Future<bool> fetchListType();
@@ -48,9 +46,9 @@ class HomeDatasourceImpl implements HomeDatasource {
 
       return true;
     } catch(xe) {
-      print(xe);
-      //throw Exception(xe);
-      return false;
+      //print(xe);
+      throw Exception(xe);
+      //return false;
     }
   }
 
