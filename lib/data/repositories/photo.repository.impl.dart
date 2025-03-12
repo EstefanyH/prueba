@@ -46,6 +46,8 @@ class PhotoRepositoryImpl extends PhotoRepository{
         if (isconnect) {
           resultado = await datasource.fetchNewCia(toJson);
 
+          await dao.updateEstado(CiaModel.fromJson(toJson));
+
           bool presult = false;
           
           if(resultado) {
@@ -54,8 +56,13 @@ class PhotoRepositoryImpl extends PhotoRepository{
               File _file = File(photo.ruta);
               print(photo.archivo);
               presult = await datasource.fetchPhoto(uri, _file);
+
+              if(presult) await pdao.updateEstado(photo);
             }
-            if (presult) shared.removeValue(AppConstant.p_cia);
+
+            if (presult) {
+              shared.removeValue(AppConstant.p_cia);
+            }
           }
         }
         resultado = true;

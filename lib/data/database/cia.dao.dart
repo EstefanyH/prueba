@@ -31,4 +31,19 @@ class CiaDao {
     return maps.map((map) => CiaModel.fromJson(map)).toList();
   }
 
+  Future<int> updateEstado(CiaModel model) async {
+    final db = await _dbHelper.database;
+    Map<String, dynamic> row = {
+      DatabaseHelper.colEnviado : 1
+    };
+
+    return await db.update(
+      tbName,
+      row,
+      where: 'ruc = ?',
+      whereArgs: [model.ruc],
+    );
+  }
+
+
 }

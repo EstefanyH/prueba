@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart' as http;
-import 'package:mime/mime.dart';
 import 'package:prueba/core/api_config.dart';
 
 final class ApiService {
@@ -46,7 +44,7 @@ final class ApiService {
       var url = Uri.parse(endpoint); // Reemplaza con la URL de tu API
       var request = http.Request('PUT', url);
       var fileBytes = await _image.readAsBytes();
-      final mimeType = lookupMimeType(_image.path);
+      //final mimeType = lookupMimeType(_image.path);
       
       request.headers.addAll({
         'Content-Type': 'image/jpeg'

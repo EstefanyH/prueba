@@ -14,7 +14,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-        context.read<HomeViewModel>().init();
+        context.read<HomeViewModel>().init(context);
     });
 
     return Scaffold(
@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              context.read<HomeViewModel>().init();
+              context.read<HomeViewModel>().init(context);
             }, 
             icon: Icon(Icons.update)),
           IconButton(

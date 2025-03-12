@@ -19,13 +19,18 @@ class HomeViewModel extends BaseViewModel with ChangeNotifier {
 
   late LatLng markerPosition;
 
-  Future<void> init() async {
+  Future<void> init(BuildContext ctx) async {
     print('HomeViewModel');
+    try {
     totPending = await repository.getTotPending();
     totRegister = await repository.getTotRegister();
 
     await getCurrentLocation();
     notifyListeners();
+    } catch(xe){
+      showMessage(ctx, 'Ocurrio un error intentar mas rato');
+    }
+
   }
 
   void onGoToNew(BuildContext ctx) async {
