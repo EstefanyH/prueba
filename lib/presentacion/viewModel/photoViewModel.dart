@@ -36,7 +36,6 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
 
   Future<void> init(BuildContext ctx) async {
     try {
-      
       await clear();
 
       _cia = await repository.getCia();
@@ -55,6 +54,8 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
   }
 
   Future<void> onSave (BuildContext ctx) async{
+    
+    showLoading();
     bool valid = false;
     try {
       if (photos.length == 3){
@@ -78,6 +79,8 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
     } catch (xe ) {
       showMessage(ctx, 'Ocurrió un error intentar mas rato');
     }
+
+      hideLoading();
   }
 
   bool isValid(BuildContext ctx, Cia model) {
@@ -87,6 +90,14 @@ class PhotoViewModel extends BaseViewModel with ChangeNotifier {
     }
     if(model.ruc.isEmpty) {
       showMessage(ctx, 'Ingresar nombre');
+      return false;
+    }
+    if (model.latitude.isEmpty){
+      showMessage(ctx, 'Ingresar latitud');
+      return false;
+    }
+    if (model.longitude.isEmpty){
+      showMessage(ctx, 'Ingresar longitud');
       return false;
     }
     return true;

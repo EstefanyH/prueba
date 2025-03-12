@@ -27,6 +27,7 @@ class NewView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               TextField(
+                maxLength: 20,
                 controller: viewModel.name_controller,
                 decoration: InputDecoration(
                   hintText: 'Nombre'
@@ -36,6 +37,7 @@ class NewView extends StatelessWidget {
                 }
               ),
               TextField(
+                maxLength: 11,
                 controller: viewModel.ruc_controller,
                 decoration: InputDecoration(
                   hintText: 'Ruc'
@@ -45,6 +47,7 @@ class NewView extends StatelessWidget {
                 }
               ),
               TextField(
+                enabled: false,
                 controller: viewModel.latitude_controller,
                 decoration: InputDecoration(
                   hintText: 'Latitud'
@@ -54,6 +57,7 @@ class NewView extends StatelessWidget {
                 }
               ),
               TextField(
+                enabled: false,
                 controller: viewModel.longitude_controller,
                 decoration: InputDecoration(
                   hintText: 'Longitude'
@@ -64,6 +68,7 @@ class NewView extends StatelessWidget {
               ),
               Text('Comentario'),
               TextField(
+                maxLength: 60,
                 controller: viewModel.comment_controller,
                 maxLines: 3,
                 decoration: InputDecoration(
